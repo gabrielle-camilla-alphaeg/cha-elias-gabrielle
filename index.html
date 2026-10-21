@@ -242,6 +242,18 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 .modal-ok{display:none}
 .ok-icon{font-size:44px;margin-bottom:8px;animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1)}
 .style-badge{position:fixed;bottom:16px;right:16px;background:rgba(143,176,154,.08);border:1px solid rgba(143,176,154,.18);padding:4px 12px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);z-index:100;opacity:.6;border-radius:99px}
+/* mini-modal identificação de nome */
+#vn-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(10,22,14,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
+.vn-box{background:#1A2A1E;border:1px solid rgba(143,176,154,.18);border-radius:22px;padding:28px 24px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.55)}
+.vn-ico{font-size:36px;margin-bottom:10px}
+.vn-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#FAFAF7;margin-bottom:4px}
+.vn-sub{font-size:12px;color:rgba(143,176,154,.6);letter-spacing:.04em;margin-bottom:20px}
+.vn-inp{width:100%;padding:13px 16px;border:1px solid rgba(143,176,154,.2);border-radius:12px;background:rgba(255,255,255,.04);color:#FAFAF7;font-size:16px;outline:none;text-align:center;box-sizing:border-box;margin-bottom:8px}
+.vn-inp::placeholder{color:rgba(143,176,154,.35)}
+.vn-inp:focus{border-color:rgba(143,176,154,.5)}
+.vn-err{font-size:11px;color:#D06090;min-height:16px;margin-bottom:10px;display:none}
+.vn-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1A6030,#2A8048);color:#FAFAF7;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.04em}
+.vn-cancel{margin-top:10px;font-size:12px;color:rgba(143,176,154,.45);cursor:pointer;text-decoration:underline;background:none;border:none;width:100%}
 /* hide tiiny.host banner */
 #tiiny-bar,#tiiny-host-bar,[id*="tiiny"],[class*="tiiny"],
 div[style*="tiiny"],iframe[src*="tiiny"],
@@ -703,8 +715,8 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
 
 <script>
 const FB='COLE_SUA_URL_FIREBASE_AQUI';
-(function(){var p=new URLSearchParams(location.search);if(p.get('reset')==='1'){localStorage.removeItem('meu_palpite_cha26');var u=new URL(location.href);u.searchParams.delete('reset');location.replace(u.toString());}})();
-(function(){var t=0,tm;var el=document.getElementById('secret-reset-trigger');if(!el)return;el.addEventListener('click',function(){t++;clearTimeout(tm);if(t>=5){t=0;localStorage.removeItem('meu_palpite_cha26');location.reload();}else tm=setTimeout(function(){t=0},1200);});})();
+(function(){var p=new URLSearchParams(location.search);if(p.get('reset')==='1'){Object.keys(localStorage).filter(function(k){return k.startsWith('meu_palpite')||k.startsWith('voto_');}).forEach(function(k){localStorage.removeItem(k);});var u=new URL(location.href);u.searchParams.delete('reset');location.replace(u.toString());}})();
+(function(){var t=0,tm;var el=document.getElementById('secret-reset-trigger');if(!el)return;el.addEventListener('click',function(){t++;clearTimeout(tm);if(t>=5){t=0;Object.keys(localStorage).filter(function(k){return k.startsWith('meu_palpite')||k.startsWith('voto_');}).forEach(function(k){localStorage.removeItem(k);});location.reload();}else tm=setTimeout(function(){t=0},1200);});})();
 document.getElementById('cal-btn').addEventListener('click',function(e){e.preventDefault();window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Chá Revelação — Elias & Gabrielle')+'&dates=20261120T150000/20261120T210000&location='+encodeURIComponent('Chácara Morágio, São José dos Pinhais, PR'),'_blank');});
 document.getElementById('wa-btn').addEventListener('click',function(e){e.preventDefault();window.open('https://wa.me/?text='+encodeURIComponent('🐻 Elias & Gabrielle convidam para o Chá Revelação\n📅 20 de novembro de 2026 · 15h\n📍 Chácara Morágio · São José dos Pinhais · PR\n\n'+location.href),'_blank');});
 var cv=document.getElementById('cv'),cx=cv.getContext('2d');var cp=[],cr;
@@ -714,19 +726,73 @@ var CF=['#D06090','#F0A8C8','#FFD0E8','#fff','#FFE8F4','#9A3060'];
 function mkP(c){return{x:Math.random()*cv.width,y:cv.height*(-.1+Math.random()*-.4),w:Math.random()*11+3,h:Math.random()*4+2,c:c,vx:(Math.random()-.5)*5,vy:Math.random()*5+2,ay:.11,rot:Math.random()*360,rv:(Math.random()-.5)*9,op:1,born:Date.now(),life:3400+Math.random()*2000};}
 function launch(cols,n){for(var i=0;i<n;i++)cp.push(mkP(cols[Math.floor(Math.random()*cols.length)]));cancelAnimationFrame(cr);tick();}
 function tick(){cx.clearRect(0,0,cv.width,cv.height);var now=Date.now();cp=cp.filter(function(p){var age=now-p.born;p.vy+=p.ay;p.x+=p.vx+Math.sin(age*.0025)*1.2;p.y+=p.vy;p.rot+=p.rv;var late=Math.max(0,age-p.life*.55)/(p.life*.45);p.op=Math.max(0,1-late);if(p.y>cv.height+30||p.op<=0)return false;cx.save();cx.globalAlpha=p.op;cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore();return true;});if(cp.length)cr=requestAnimationFrame(tick);else cx.clearRect(0,0,cv.width,cv.height);}
-async function incV(e){if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return;try{await fetch(FB+'/votes/'+e+'.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({'.sv':{'increment':1}})});}catch(err){}}
-async function getScore(){if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return{m:0,f:0};try{var r=await fetch(FB+'/votes.json');var d=await r.json();return{m:d&&d.menino?d.menino:0,f:d&&d.menina?d.menina:0};}catch(err){return{m:0,f:0};}}
+/* ── VOTO: grava entrada individual no Firebase ── */
+/* modal HTML inserido via JS para não quebrar DOM antes de GRUPOS */
+var _pendingGenero=null;
+async function registrarVoto(display,genero){
+  if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return;
+  try{
+    var entry={display:display,genero:genero,ts:{'.sv':'timestamp'}};
+    await fetch(FB+'/votos.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+  }catch(err){}
+}
+async function getScore(){
+  if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return{m:0,f:0,votos:[]};
+  try{
+    var r=await fetch(FB+'/votos.json');
+    var d=await r.json();
+    if(!d)return{m:0,f:0,votos:[]};
+    var m=0,f=0,votos=[];
+    Object.values(d).forEach(function(v){
+      if(v.genero==='menino')m++;else if(v.genero==='menina')f++;
+      votos.push(v);
+    });
+    votos.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
+    return{m:m,f:f,votos:votos};
+  }catch(err){return{m:0,f:0,votos:[]};}
+}
 var MM=['É menino! Que venha cheio de vida! 🩵','Mais um craque no jardim da família! ⚽'];
 var MF=['É menina! Que venha cheia de graça! 🩷','Uma bailarina nascendo entre as flores! 🩰'];
-var meuV=localStorage.getItem('meu_palpite_cha26')||null;
-async function votar(e,ev){
-  if(meuV){abrirRes(meuV);updScore();return;}
-  meuV=e;localStorage.setItem('meu_palpite_cha26',e);
-  document.getElementById('vm').classList.toggle('selected',e==='menino');
-  document.getElementById('vf').classList.toggle('selected',e==='menina');
-  launch(e==='menino'?CM:CF,220);
-  if(ev){var em=document.createElement('div');em.className='ef';em.textContent=e==='menino'?'⚽':'🩰';em.style.cssText='left:'+ev.clientX+'px;top:'+ev.clientY+'px;font-size:68px';document.body.appendChild(em);setTimeout(function(){em.remove();},1700);}
-  abrirRes(e);await incV(e);await updScore();
+var meuVoto=null;
+try{var _sv=localStorage.getItem('meu_palpite_cha26');if(_sv)meuVoto=JSON.parse(_sv);}catch(e){}
+
+/* Abre mini-modal de identificação antes do voto */
+function votar(genero,ev){
+  if(meuVoto){abrirRes(meuVoto.genero);updScore();return;}
+  _pendingGenero=genero;
+  var vm=document.getElementById('vn-modal');
+  if(vm){
+    document.getElementById('vn-inp').value='';
+    document.getElementById('vn-err').style.display='none';
+    vm.style.display='flex';
+    setTimeout(function(){document.getElementById('vn-inp').focus();},80);
+  }
+}
+function fecharVnModal(){document.getElementById('vn-modal').style.display='none';_pendingGenero=null;}
+async function confirmarNomeVoto(){
+  var raw=document.getElementById('vn-inp').value.trim();
+  var err=document.getElementById('vn-err');
+  if(!raw){err.textContent='Escreva seu nome para votar.';err.style.display='block';return;}
+  var gr=lookGift(raw);
+  if(!gr){err.textContent='Nome não encontrado na lista de convidados. Tente seu primeiro nome.';err.style.display='block';return;}
+  /* Bloquear voto duplo por display (grupo) */
+  var chave='voto_'+gr.display.replace(/\s/g,'_');
+  if(localStorage.getItem(chave)){
+    err.textContent='Seu grupo já registrou um palpite! 🌿';err.style.display='block';
+    setTimeout(function(){fecharVnModal();abrirRes(meuVoto?meuVoto.genero:_pendingGenero);updScore();},1400);
+    return;
+  }
+  var genero=_pendingGenero;
+  fecharVnModal();
+  meuVoto={genero:genero,display:gr.display};
+  localStorage.setItem('meu_palpite_cha26',JSON.stringify(meuVoto));
+  localStorage.setItem(chave,'1');
+  document.getElementById('vm').classList.toggle('selected',genero==='menino');
+  document.getElementById('vf').classList.toggle('selected',genero==='menina');
+  launch(genero==='menino'?CM:CF,220);
+  abrirRes(genero);
+  await registrarVoto(gr.display,genero);
+  await updScore();
   setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},2000);
 }
 function abrirRes(e){
@@ -738,13 +804,42 @@ function abrirRes(e){
   setTimeout(function(){document.getElementById('rc').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
 }
 async function updScore(){var d=await getScore();var tot=d.m+d.f||1;var pm=Math.round(d.m/tot*100),pf=100-pm;document.getElementById('rf-m').style.width=pm+'%';document.getElementById('rf-f').style.width=pf+'%';document.getElementById('rp-m').textContent=pm+'%';document.getElementById('rp-f').textContent=pf+'%';var t=d.m+d.f;document.getElementById('rc-tot').innerHTML='<strong>'+t+'</strong> '+(t===1?'voto':'votos')+' registrado'+(t===1?'':'s');}
-if(meuV){document.getElementById(meuV==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuV);updScore();setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},1200);},600);}
-var FG=[{n:'Carol',g:'f',c:'#C85878'},{n:'Gustavo',g:'m',c:'#3068A8'},{n:'Larissa',g:'f',c:'#B04070'},{n:'Pedro',g:'m',c:'#2860A0'},{n:'Nataly',g:'f',c:'#C03878'},{n:'Erick',g:'m',c:'#2870A8'},{n:'Bianca',g:'f',c:'#B83870'},{n:'Lucas',g:'m',c:'#3878A8'},{n:'Jaqueline',g:'f',c:'#A82858'},{n:'Caio',g:'m',c:'#3068A0'},{n:'Alice',g:'f',c:'#D03868'},{n:'Felipe',g:'m',c:'#3068A0'}];
-var fi=0,ft=0,fa=false;
-function startFeed(){if(fa)return;fa=true;fi=0;ft=0;nextF();}
-function nextF(){setTimeout(function(){showTyp();setTimeout(function(){insF();if(fi<FG.length)nextF();},750+Math.floor(Math.random()*400));},1400+Math.floor(Math.random()*2200));}
-function showTyp(){var fl=document.getElementById('fl');var tr=fl.querySelector('.typ-row');if(tr)tr.remove();var p=FG[fi]||FG[0];var r=document.createElement('div');r.className='typ-row';r.innerHTML='<div class="fi-av" style="background:'+p.c+'">'+p.n[0]+'</div><div class="typ-dots"><div class="typ-dot"></div><div class="typ-dot"></div><div class="typ-dot"></div></div>';var ph=fl.querySelector('.feed-ph');if(ph)ph.remove();fl.insertBefore(r,fl.firstChild);}
-function insF(){if(fi>=FG.length)return;var p=FG[fi++];ft++;var fl=document.getElementById('fl');var tr=fl.querySelector('.typ-row');if(tr)tr.remove();var ago=ft===1?'agora':Math.floor(Math.random()*55+5)+'s atrás';var r=document.createElement('div');r.className='fi';r.innerHTML='<div class="fi-av" style="background:'+p.c+'">'+p.n[0]+'</div><div style="flex:1"><div class="fi-name">'+p.n+'</div><div class="fi-det">votou em <b class="b'+p.g+'">'+(p.g==='m'?'Menino ⚽':'Menina 🩰')+'</b></div></div><div class="fi-time">'+ago+'</div>';fl.insertBefore(r,fl.firstChild);while(fl.children.length>4)fl.removeChild(fl.lastChild);document.getElementById('fc').textContent=ft+(ft===1?' voto':' votos');}
+if(meuVoto){document.getElementById(meuVoto.genero==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuVoto.genero);updScore();setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},1200);},600);}
+
+/* Feed real: lê votos do Firebase e exibe */
+var _feedRodando=false;
+var _feedExibidos=new Set();
+var CORES_AV=['#C85878','#3068A8','#B04070','#2860A0','#C03878','#2870A8','#A82858','#3878A8','#D03868','#1A6030','#8A3060','#2870A0'];
+function corAv(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return CORES_AV[h%CORES_AV.length];}
+function tsFmt(ts){if(!ts)return'agora';var d=Date.now()-ts;if(d<90000)return'agora';var m=Math.round(d/60000);return m+'min atrás';}
+function addFeedItem(v,pulsando){
+  var fl=document.getElementById('fl');
+  var ph=fl.querySelector('.feed-ph');if(ph)ph.remove();
+  var tr=fl.querySelector('.typ-row');if(tr&&!pulsando)tr.remove();
+  if(!pulsando&&_feedExibidos.has(v.display+v.genero))return;
+  _feedExibidos.add(v.display+v.genero);
+  var ini=v.display.charAt(0).toUpperCase();
+  var cor=corAv(v.display);
+  var gLabel=v.genero==='menino'?'Menino ⚽':'Menina 🩰';
+  var gc=v.genero==='menino'?'m':'f';
+  var r=document.createElement('div');r.className='fi';
+  r.innerHTML='<div class="fi-av" style="background:'+cor+'">'+ini+'</div><div style="flex:1"><div class="fi-name">'+v.display+'</div><div class="fi-det">votou em <b class="b'+gc+'">'+gLabel+'</b></div></div><div class="fi-time">'+tsFmt(v.ts)+'</div>';
+  fl.insertBefore(r,fl.firstChild);
+  while(fl.children.length>5)fl.removeChild(fl.lastChild);
+  var t=_feedExibidos.size;
+  document.getElementById('fc').textContent=t+(t===1?' voto':' votos');
+}
+async function startFeed(){
+  if(_feedRodando)return;_feedRodando=true;
+  /* carga inicial */
+  var d=await getScore();
+  d.votos.slice(0,5).reverse().forEach(function(v){addFeedItem(v,false);});
+  /* polling a cada 8s para novos votos */
+  setInterval(async function(){
+    var nd=await getScore();
+    nd.votos.forEach(function(v){addFeedItem(v,false);});
+  },8000);
+}
 // Grupos: {display, members:[], gift}
 var GRUPOS=[
   {display:'Gracieli, André e Jorge',members:['gracieli','andre','jorge'],gift:'1 fralda RN + 1 pomada para assaduras'},
@@ -813,6 +908,13 @@ function lookGift(n){
   }
   return null;
 }
+/* Injeta modal de nome para voto */
+(function(){
+  var d=document.createElement('div');
+  d.id='vn-modal';
+  d.innerHTML='<div class="vn-box"><div class="vn-ico">🌿</div><div class="vn-title">Qual é o seu nome?</div><div class="vn-sub">Só convidados podem votar</div><input id="vn-inp" class="vn-inp" type="text" placeholder="Seu nome" autocomplete="off" onkeydown="if(event.key===\'Enter\')confirmarNomeVoto()"><div id="vn-err" class="vn-err"></div><button class="vn-btn" onclick="confirmarNomeVoto()">Registrar palpite</button><button class="vn-cancel" onclick="fecharVnModal()">cancelar</button></div>';
+  document.body.appendChild(d);
+})();
 var P=new URLSearchParams(location.search);var nome=P.get('nome');
 if(nome){document.getElementById('gb-kicker').textContent='olá,';var gn=document.getElementById('gb-name');gn.style.display='block';var gr=lookGift(nome);var displayNome=gr?gr.display:nome;gn.textContent=displayNome+'!';document.getElementById('gb-default').style.display='none';if(gr){document.getElementById('gv').textContent=gr.gift;document.getElementById('gw').style.display='block';}}
 function openModal(){document.getElementById('mb').classList.add('on');if(nome)document.getElementById('mn').value=nome;}
