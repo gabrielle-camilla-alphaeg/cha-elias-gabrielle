@@ -714,7 +714,9 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
 <div class="style-badge">Jardim Botânico</div>
 
 <script>
-const FB='COLE_SUA_URL_FIREBASE_AQUI';
+const JB_BIN='6ad9018eac6210605a46b4f6';
+const JB_KEY='$2a$10$3LhBQXebn6LotV0DzWFMY.9zClLUcUNocwbdxal0t/EuSNqa5X0Gu';
+const JB_OK=JB_BIN!=='COLE_BIN_ID_AQUI'&&JB_KEY!=='COLE_MASTER_KEY_AQUI';
 (function(){var p=new URLSearchParams(location.search);if(p.get('reset')==='1'){Object.keys(localStorage).filter(function(k){return k.startsWith('meu_palpite')||k.startsWith('voto_');}).forEach(function(k){localStorage.removeItem(k);});var u=new URL(location.href);u.searchParams.delete('reset');location.replace(u.toString());}})();
 (function(){var t=0,tm;var el=document.getElementById('secret-reset-trigger');if(!el)return;el.addEventListener('click',function(){t++;clearTimeout(tm);if(t>=5){t=0;Object.keys(localStorage).filter(function(k){return k.startsWith('meu_palpite')||k.startsWith('voto_');}).forEach(function(k){localStorage.removeItem(k);});location.reload();}else tm=setTimeout(function(){t=0},1200);});})();
 document.getElementById('cal-btn').addEventListener('click',function(e){e.preventDefault();window.open('https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('Chá Revelação — Elias & Gabrielle')+'&dates=20261120T150000/20261120T210000&location='+encodeURIComponent('Chácara Morágio, São José dos Pinhais, PR'),'_blank');});
@@ -726,29 +728,43 @@ var CF=['#D06090','#F0A8C8','#FFD0E8','#fff','#FFE8F4','#9A3060'];
 function mkP(c){return{x:Math.random()*cv.width,y:cv.height*(-.1+Math.random()*-.4),w:Math.random()*11+3,h:Math.random()*4+2,c:c,vx:(Math.random()-.5)*5,vy:Math.random()*5+2,ay:.11,rot:Math.random()*360,rv:(Math.random()-.5)*9,op:1,born:Date.now(),life:3400+Math.random()*2000};}
 function launch(cols,n){for(var i=0;i<n;i++)cp.push(mkP(cols[Math.floor(Math.random()*cols.length)]));cancelAnimationFrame(cr);tick();}
 function tick(){cx.clearRect(0,0,cv.width,cv.height);var now=Date.now();cp=cp.filter(function(p){var age=now-p.born;p.vy+=p.ay;p.x+=p.vx+Math.sin(age*.0025)*1.2;p.y+=p.vy;p.rot+=p.rv;var late=Math.max(0,age-p.life*.55)/(p.life*.45);p.op=Math.max(0,1-late);if(p.y>cv.height+30||p.op<=0)return false;cx.save();cx.globalAlpha=p.op;cx.translate(p.x,p.y);cx.rotate(p.rot*Math.PI/180);cx.fillStyle=p.c;cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);cx.restore();return true;});if(cp.length)cr=requestAnimationFrame(tick);else cx.clearRect(0,0,cv.width,cv.height);}
-/* ── VOTO: grava entrada individual no Firebase ── */
+/* ── VOTO: JSONBin.io — lê bin inteiro, adiciona voto, grava de volta ── */
 /* modal HTML inserido via JS para não quebrar DOM antes de GRUPOS */
 var _pendingGenero=null;
+var _jbCache=null;
+var _jbLock=false;
+async function _jbGet(){
+  var r=await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN+'/latest',{headers:{'X-Master-Key':JB_KEY}});
+  var d=await r.json();
+  return d.record||{votos:[]};
+}
+async function _jbPut(data){
+  await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JB_KEY},body:JSON.stringify(data)});
+}
 async function registrarVoto(display,genero){
-  if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return;
+  if(!JB_OK)return;
+  var attempts=0;
+  while(_jbLock&&attempts<20){await new Promise(function(r){setTimeout(r,300);});attempts++;}
+  _jbLock=true;
   try{
-    var entry={display:display,genero:genero,ts:{'.sv':'timestamp'}};
-    await fetch(FB+'/votos.json',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(entry)});
+    var data=await _jbGet();
+    if(!Array.isArray(data.votos))data.votos=[];
+    data.votos.push({display:display,genero:genero,ts:Date.now()});
+    await _jbPut(data);
+    _jbCache=data;
   }catch(err){}
+  _jbLock=false;
 }
 async function getScore(){
-  if(FB==='COLE_SUA_URL_FIREBASE_AQUI')return{m:0,f:0,votos:[]};
+  if(!JB_OK)return{m:0,f:0,votos:[]};
   try{
-    var r=await fetch(FB+'/votos.json');
-    var d=await r.json();
-    if(!d)return{m:0,f:0,votos:[]};
-    var m=0,f=0,votos=[];
-    Object.values(d).forEach(function(v){
-      if(v.genero==='menino')m++;else if(v.genero==='menina')f++;
-      votos.push(v);
-    });
-    votos.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
-    return{m:m,f:f,votos:votos};
+    var data=await _jbGet();
+    _jbCache=data;
+    var arr=Array.isArray(data.votos)?data.votos:[];
+    var m=0,f=0;
+    arr.forEach(function(v){if(v.genero==='menino')m++;else if(v.genero==='menina')f++;});
+    arr.sort(function(a,b){return(b.ts||0)-(a.ts||0);});
+    return{m:m,f:f,votos:arr};
   }catch(err){return{m:0,f:0,votos:[]};}
 }
 var MM=['É menino! Que venha cheio de vida! 🩵','Mais um craque no jardim da família! ⚽'];
