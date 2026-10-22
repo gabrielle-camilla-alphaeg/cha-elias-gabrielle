@@ -524,10 +524,8 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
               <ellipse cx="50" cy="27" rx="2" ry="1.5" fill="#FFE0F4"/>
             </svg>
           </div>
-          <!-- máscara: a sapatilha só aparece acima da borda da bolsa -->
-          <div style="position:absolute;bottom:36px;left:0;right:0;overflow:hidden;height:115px;z-index:3">
-            <!-- sapatilha emergindo -->
-            <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);animation:shoeEmerge 2.2s 0.3s ease-out forwards;opacity:0">
+          <!-- sapatilha emergindo acima da bolsa -->
+          <div style="position:absolute;bottom:42px;left:50%;transform:translateX(-50%);animation:shoeEmerge 2.2s 0.3s ease-out forwards;opacity:0;z-index:4">
           <svg width="110" height="90" viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <!-- gradiente principal do cetim - nacarado rosê -->
@@ -587,11 +585,6 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
 
             <!-- aura de glow rosado atrás da sapatilha -->
             <ellipse cx="62" cy="68" rx="48" ry="30" fill="rgba(240,130,190,.13)" filter="url(#softBlur)"/>
-
-            <!-- sombra no chão -->
-            <ellipse cx="55" cy="98" rx="38" ry="6" fill="rgba(0,0,0,.32)" filter="url(#softBlur)"/>
-            <!-- reflexo suave no palco -->
-            <ellipse cx="55" cy="99" rx="30" ry="3.5" fill="rgba(220,130,180,.18)" filter="url(#softBlur)"/>
 
             <!-- === CORPO PRINCIPAL DA SAPATILHA === -->
             <!-- sombra interna da sapatilha (profundidade) -->
@@ -695,7 +688,6 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
             <path d="M97 58 Q103 68 104 78 Q104 86 97 91" stroke="rgba(190,100,150,.3)" stroke-width="0.7" fill="none" stroke-dasharray="2.5,1.8"/>
           </svg>
           </div><!-- fim sapatilha -->
-          </div><!-- fim máscara overflow -->
         </div><!-- fim shoe-wrap -->
       </div>
       <div class="vc-label-f"><div class="vc-name-f">Menina</div><div class="vc-tag-f">🩷</div></div>
