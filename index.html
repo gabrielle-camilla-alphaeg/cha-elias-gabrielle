@@ -570,10 +570,24 @@ var _jbLock=false;
 async function _jbGet(){
   var r=await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN+'/latest',{headers:{'X-Master-Key':JB_KEY}});
   var d=await r.json();
-  return d.record||{votos:[]};
+  return d.record||{votos:[],confirmados:[]};
 }
 async function _jbPut(data){
   await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JB_KEY},body:JSON.stringify(data)});
+}
+async function registrarConfirmacao(nome){
+  if(!JB_OK)return;
+  var attempts=0;
+  while(_jbLock&&attempts<20){await new Promise(function(r){setTimeout(r,300);});attempts++;}
+  _jbLock=true;
+  try{
+    var data=await _jbGet();
+    if(!Array.isArray(data.confirmados))data.confirmados=[];
+    data.confirmados.push({nome:nome,ts:Date.now()});
+    await _jbPut(data);
+    _jbCache=data;
+  }catch(err){}
+  _jbLock=false;
 }
 async function registrarVoto(display,genero){
   if(!JB_OK)return;
@@ -742,7 +756,7 @@ var P=new URLSearchParams(location.search);var nome=P.get('nome');
 if(nome){document.getElementById('gb-kicker').textContent='olá,';var gn=document.getElementById('gb-name');gn.style.display='block';var gr=lookGift(nome);var displayNome=gr?gr.display:nome;gn.textContent=displayNome+'!';document.getElementById('gb-default').style.display='none';if(gr){document.getElementById('gv').textContent=gr.gift;document.getElementById('gw').style.display='block';}}
 function openModal(){document.getElementById('mb').classList.add('on');if(nome)document.getElementById('mn').value=nome;}
 function closeModal(){document.getElementById('mb').classList.remove('on');setTimeout(function(){document.getElementById('mf').style.display='';document.getElementById('mo').style.display='none';},300);}
-function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'você';var gr=lookGift(raw);var n=gr?gr.display:raw;document.getElementById('mo-msg').textContent=n+', a gente te espera em novembro!';if(gr&&gr.gift){document.getElementById('mo-gift-val').textContent=gr.gift;document.getElementById('mo-gift').style.display='block';}else{document.getElementById('mo-gift').style.display='none';}document.getElementById('mf').style.display='none';document.getElementById('mo').style.display='block';}
+function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'você';var gr=lookGift(raw);var n=gr?gr.display:raw;document.getElementById('mo-msg').textContent=n+', a gente te espera em novembro!';if(gr&&gr.gift){document.getElementById('mo-gift-val').textContent=gr.gift;document.getElementById('mo-gift').style.display='block';}else{document.getElementById('mo-gift').style.display='none';}document.getElementById('mf').style.display='none';document.getElementById('mo').style.display='block';registrarConfirmacao(n);}
 /* Animação chute ao gol — só para menino */
 (function(){
   var ball=document.getElementById('ball-anim');
@@ -761,8 +775,8 @@ function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'
       ball.style.animation='ballBounceReal 1.9s cubic-bezier(.36,.07,.19,.97) infinite';
     },2400);
   }
-  setInterval(doKick,5000);
-  setTimeout(doKick,1200);
+  setInterval(doKick,2200);
+  setTimeout(doKick,400);
 })();
 /* Animação pétalas — só para menina */
 (function(){
