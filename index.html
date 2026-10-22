@@ -749,7 +749,7 @@ function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'
   var gool=document.getElementById('gool-txt');
   if(!ball||!gool)return;
   function doKick(){
-    if(window._votoGenero==='menina')return; // menina tem sua própria animação
+    if(window._votoGenero!=='menino')return; // só anima se votou menino
     ball.style.animation='ballKick 1.4s cubic-bezier(.22,1,.36,1) forwards';
     setTimeout(function(){
       gool.style.display='block';
