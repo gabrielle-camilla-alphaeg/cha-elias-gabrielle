@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- v3 -->
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -507,13 +508,6 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
   </div>
 </section>
 
-<section class="live-wrap" id="lw">
-  <div class="live-pill"><div class="live-dot"></div>Ao vivo</div>
-  <div class="feed-card">
-    <div class="feed-head"><div class="feed-head-lbl">Palpites dos convidados</div><div class="feed-count" id="fc">—</div></div>
-    <div class="feed-list" id="fl"><div class="feed-ph" id="fp"><span>🌿</span><br>Aguardando convidados…</div></div>
-  </div>
-</section>
 
 <section class="gift-wrap" id="gw">
   <div class="gift-card"><div class="gift-head"><div class="gift-head-ico">🎁</div><div><div class="gift-head-kicker">Sugestão especial</div><div class="gift-head-title">Seu presentinho</div></div></div><div class="gift-body"><div class="gift-box"><div class="gift-lbl">O que trazer</div><div class="gift-val" id="gv"></div></div></div></div>
@@ -665,7 +659,6 @@ function _confirmarVotoNome(){
   abrirRes(genero);
   registrarVoto(nome,genero);
   updScore();
-  setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},2000);
 }
 function _fecharVotoNome(){document.getElementById('vn-bg').style.display='none';_pendingVotoGenero=null;}
 function abrirRes(e){
@@ -677,7 +670,7 @@ function abrirRes(e){
   setTimeout(function(){document.getElementById('rc').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
 }
 async function updScore(){var d=await getScore();var tot=d.m+d.f||1;var pm=Math.round(d.m/tot*100),pf=100-pm;document.getElementById('rf-m').style.width=pm+'%';document.getElementById('rf-f').style.width=pf+'%';document.getElementById('rp-m').textContent=pm+'%';document.getElementById('rp-f').textContent=pf+'%';var t=d.m+d.f;document.getElementById('rc-tot').innerHTML='<strong>'+t+'</strong> '+(t===1?'voto':'votos')+' registrado'+(t===1?'':'s');}
-if(meuVoto){window._votoGenero=meuVoto.genero;document.getElementById(meuVoto.genero==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuVoto.genero);updScore();setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();if(meuVoto.genero==='menina'&&window._startPetalLoop)window._startPetalLoop();},1200);},600);}
+if(meuVoto){window._votoGenero=meuVoto.genero;document.getElementById(meuVoto.genero==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuVoto.genero);updScore();setTimeout(function(){if(meuVoto.genero==='menina'&&window._startPetalLoop)window._startPetalLoop();},1200);},600);}
 
 /* Feed real: lê votos do Firebase e exibe */
 var _feedRodando=false;
