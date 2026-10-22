@@ -29,6 +29,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 @keyframes goalFlash{0%,100%{opacity:0;transform:translateX(-50%) scale(.5)}50%{opacity:1;transform:translateX(-50%) scale(1.1)}70%{opacity:1;transform:translateX(-50%) scale(1)}}
 @keyframes shoeEmerge{0%{opacity:0;transform:translateX(-50%) translateY(30px) scale(.5) rotate(-20deg)}60%{opacity:1;transform:translateX(-50%) translateY(-14px) scale(1.08) rotate(5deg)}80%{transform:translateX(-50%) translateY(-10px) scale(1.04) rotate(-2deg)}100%{opacity:1;transform:translateX(-50%) translateY(-12px) scale(1) rotate(0deg)}}
 @keyframes shoeFloat{0%,100%{transform:translateX(-50%) translateY(-12px) rotate(-1deg)}50%{transform:translateX(-50%) translateY(-22px) rotate(1.5deg)}}
+@keyframes petalRise{0%{opacity:0;transform:translateY(0) scale(.5) rotate(0deg)}30%{opacity:1}80%{opacity:.8}100%{opacity:0;transform:translateY(-110px) scale(1.1) rotate(45deg)}}
 @keyframes bagOpen{0%,30%{transform:translateX(-50%) scale(1) rotate(0deg)}50%{transform:translateX(-50%) scale(1.08) rotate(-4deg)}100%{transform:translateX(-50%) scale(1) rotate(0deg)}}
 @keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}40%{opacity:1;transform:scale(1)}70%{opacity:.8;transform:scale(1.2)}}
 @keyframes ribbonFloat{0%{opacity:0;transform:translateY(10px) rotate(-10deg)}50%{opacity:1;transform:translateY(-5px) rotate(5deg)}100%{opacity:0;transform:translateY(-20px) rotate(15deg)}}
@@ -783,9 +784,11 @@ function votar(genero,ev){
   meuVoto={genero:genero,display:'convidado'};
   localStorage.setItem('meu_palpite_cha26',JSON.stringify(meuVoto));
   localStorage.setItem(chave,'1');
+  window._votoGenero=genero;
   document.getElementById('vm').classList.toggle('selected',genero==='menino');
   document.getElementById('vf').classList.toggle('selected',genero==='menina');
   launch(genero==='menino'?CM:CF,220);
+  if(genero==='menina'&&window._startPetalLoop)window._startPetalLoop();
   abrirRes(genero);
   registrarVoto('convidado',genero);
   updScore();
@@ -800,7 +803,7 @@ function abrirRes(e){
   setTimeout(function(){document.getElementById('rc').scrollIntoView({behavior:'smooth',block:'nearest'});},100);
 }
 async function updScore(){var d=await getScore();var tot=d.m+d.f||1;var pm=Math.round(d.m/tot*100),pf=100-pm;document.getElementById('rf-m').style.width=pm+'%';document.getElementById('rf-f').style.width=pf+'%';document.getElementById('rp-m').textContent=pm+'%';document.getElementById('rp-f').textContent=pf+'%';var t=d.m+d.f;document.getElementById('rc-tot').innerHTML='<strong>'+t+'</strong> '+(t===1?'voto':'votos')+' registrado'+(t===1?'':'s');}
-if(meuVoto){document.getElementById(meuVoto.genero==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuVoto.genero);updScore();setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},1200);},600);}
+if(meuVoto){window._votoGenero=meuVoto.genero;document.getElementById(meuVoto.genero==='menino'?'vm':'vf').classList.add('selected');setTimeout(function(){abrirRes(meuVoto.genero);updScore();setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();if(meuVoto.genero==='menina'&&window._startPetalLoop)window._startPetalLoop();},1200);},600);}
 
 /* Feed real: lê votos do Firebase e exibe */
 var _feedRodando=false;
@@ -910,12 +913,13 @@ if(nome){document.getElementById('gb-kicker').textContent='olá,';var gn=documen
 function openModal(){document.getElementById('mb').classList.add('on');if(nome)document.getElementById('mn').value=nome;}
 function closeModal(){document.getElementById('mb').classList.remove('on');setTimeout(function(){document.getElementById('mf').style.display='';document.getElementById('mo').style.display='none';},300);}
 function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'você';var gr=lookGift(raw);var n=gr?gr.display:raw;document.getElementById('mo-msg').textContent=n+', a gente te espera em novembro!';if(gr&&gr.gift){document.getElementById('mo-gift-val').textContent=gr.gift;document.getElementById('mo-gift').style.display='block';}else{document.getElementById('mo-gift').style.display='none';}document.getElementById('mf').style.display='none';document.getElementById('mo').style.display='block';}
-/* Animação chute ao gol */
+/* Animação chute ao gol — só para menino */
 (function(){
   var ball=document.getElementById('ball-anim');
   var gool=document.getElementById('gool-txt');
   if(!ball||!gool)return;
   function doKick(){
+    if(window._votoGenero==='menina')return; // menina tem sua própria animação
     ball.style.animation='ballKick 1.4s cubic-bezier(.22,1,.36,1) forwards';
     setTimeout(function(){
       gool.style.display='block';
@@ -929,6 +933,30 @@ function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'
   }
   setInterval(doKick,5000);
   setTimeout(doKick,1200);
+})();
+/* Animação pétalas — só para menina */
+(function(){
+  var wrap=document.querySelector('.shoe-wrap');
+  if(!wrap)return;
+  var petals=['🌸','🌷','✨','🩷','💗'];
+  window._petalLoop=null;
+  function spawnPetal(){
+    if(window._votoGenero!=='menina')return;
+    var p=document.createElement('div');
+    var sym=petals[Math.floor(Math.random()*petals.length)];
+    var x=Math.random()*160-20;
+    var dur=(1.8+Math.random()*1.4).toFixed(2);
+    var size=(16+Math.random()*14).toFixed(0);
+    p.textContent=sym;
+    p.style.cssText='position:absolute;left:'+x+'px;bottom:0;font-size:'+size+'px;opacity:0;pointer-events:none;animation:petalRise '+dur+'s ease-out forwards;z-index:10';
+    wrap.appendChild(p);
+    setTimeout(function(){p.remove();},parseFloat(dur)*1000+100);
+  }
+  window._startPetalLoop=function(){
+    if(window._petalLoop)return;
+    spawnPetal();
+    window._petalLoop=setInterval(function(){spawnPetal();},600);
+  };
 })();
 // sapatilha: emerge → levita em loop
 (function(){
