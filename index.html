@@ -25,6 +25,12 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 @keyframes ballBounceReal{0%,100%{transform:translateX(-50%) translateY(0)}40%{transform:translateX(-50%) translateY(-44px)}75%{transform:translateX(-50%) translateY(-6px)}}
 @keyframes shadowScale{0%,100%{transform:translateX(-50%) scaleX(1);opacity:.45}40%{transform:translateX(-50%) scaleX(.42);opacity:.1}}
 @keyframes ballSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@keyframes ballKick{0%{transform:translateX(-50%) translateY(0) rotate(0deg)}15%{transform:translateX(-50%) translateY(-20px) rotate(15deg)}40%{transform:translateX(60px) translateY(-80px) rotate(120deg)}70%{transform:translateX(30px) translateY(-55px) rotate(200deg)}85%{transform:translateX(32px) translateY(-54px) rotate(220deg)}100%{transform:translateX(-50%) translateY(0) rotate(360deg)}}
+@keyframes goalFlash{0%,100%{opacity:0;transform:translateX(-50%) scale(.5)}50%{opacity:1;transform:translateX(-50%) scale(1.1)}70%{opacity:1;transform:translateX(-50%) scale(1)}}
+@keyframes shoeEmerge{0%{opacity:0;transform:translateX(-50%) translateY(30px) scale(.5) rotate(-20deg)}60%{opacity:1;transform:translateX(-50%) translateY(-14px) scale(1.08) rotate(5deg)}80%{transform:translateX(-50%) translateY(-10px) scale(1.04) rotate(-2deg)}100%{opacity:1;transform:translateX(-50%) translateY(-12px) scale(1) rotate(0deg)}}
+@keyframes bagOpen{0%,30%{transform:translateX(-50%) scale(1) rotate(0deg)}50%{transform:translateX(-50%) scale(1.08) rotate(-4deg)}100%{transform:translateX(-50%) scale(1) rotate(0deg)}}
+@keyframes sparkle{0%,100%{opacity:0;transform:scale(0)}40%{opacity:1;transform:scale(1)}70%{opacity:.8;transform:scale(1.2)}}
+@keyframes ribbonFloat{0%{opacity:0;transform:translateY(10px) rotate(-10deg)}50%{opacity:1;transform:translateY(-5px) rotate(5deg)}100%{opacity:0;transform:translateY(-20px) rotate(15deg)}}
 @keyframes spotFlicker{0%,100%{opacity:.18}50%{opacity:.32}}
 @keyframes spotGlow{0%,100%{opacity:.5}50%{opacity:.95}}
 @keyframes shoeLevitate{0%,100%{transform:translateX(-50%) translateY(0) rotate(-2deg)}50%{transform:translateX(-50%) translateY(-10px) rotate(1deg)}}
@@ -123,7 +129,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 .field-svg-b{position:absolute;inset:0;width:100%;height:100%}
 /* bola realista SVG com bounce e spin */
 .ball-wrap{position:absolute;bottom:24px;left:50%;z-index:6;animation:ballBounceReal 1.9s cubic-bezier(.36,.07,.19,.97) infinite}
-.ball-spin-inner{animation:ballSpin 3s linear infinite}
+.ball-spin-inner{border-radius:50%;overflow:hidden;display:block;line-height:0}
 .ball-sh{position:absolute;bottom:16px;left:50%;transform:translateX(-50%);width:46px;height:9px;border-radius:50%;background:rgba(0,0,0,.75);filter:blur(5px);animation:shadowScale 1.9s cubic-bezier(.36,.07,.19,.97) infinite;z-index:5}
 .vc-label-b{padding:8px 12px 16px;position:relative;z-index:8;background:linear-gradient(transparent,rgba(0,0,0,.55))}
 .vc-name-b{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28px;color:#fff}
@@ -135,7 +141,7 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 .garden-bg{position:absolute;inset:0;background:#110A1C}
 .garden-spot{display:none}
 /* bailarina */
-.shoe-wrap{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);z-index:6;animation:shoeLevitate 3s ease-in-out infinite;filter:drop-shadow(0 6px 12px rgba(180,60,130,.35))}
+.shoe-wrap{position:absolute;bottom:6px;left:50%;transform:translateX(-50%);z-index:6;filter:drop-shadow(0 4px 10px rgba(180,60,130,.3))}
 /* estrelinhas douradas */
 .star-el{position:absolute;animation:starTwinkle ease-in-out infinite;z-index:5}
 .s1{top:14px;left:18%;animation-duration:2.1s;animation-delay:0s}
@@ -372,42 +378,61 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
           <circle cx="90" cy="92" r="2.5" fill="rgba(255,255,255,.3)"/>
           <circle cx="90" cy="60" r="2" fill="rgba(255,255,255,.25)"/>
         </svg>
-        <div class="ball-wrap">
+        <div class="ball-wrap" id="ball-anim" style="animation:ballBounceReal 1.9s cubic-bezier(.36,.07,.19,.97) infinite">
           <div class="ball-spin-inner">
-            <svg width="58" height="58" viewBox="0 0 62 62" fill="none" style="border-radius:50%;overflow:hidden;display:block">
+            <svg width="58" height="58" viewBox="0 0 62 62" fill="none" style="display:block">
               <defs>
                 <radialGradient id="bG" cx="38%" cy="32%" r="68%">
                   <stop offset="0%" stop-color="#FFFFFF"/>
-                  <stop offset="30%" stop-color="#F0F0EE"/>
-                  <stop offset="65%" stop-color="#C8C8C4"/>
-                  <stop offset="100%" stop-color="#888884"/>
+                  <stop offset="28%" stop-color="#F0F0EE"/>
+                  <stop offset="62%" stop-color="#D0D0CC"/>
+                  <stop offset="100%" stop-color="#909090"/>
                 </radialGradient>
-                <radialGradient id="bS" cx="60%" cy="68%" r="55%">
-                  <stop offset="0%" stop-color="rgba(0,0,0,.45)"/>
+                <radialGradient id="bS" cx="62%" cy="70%" r="55%">
+                  <stop offset="0%" stop-color="rgba(0,0,0,.5)"/>
                   <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
                 </radialGradient>
-                <radialGradient id="bGl" cx="30%" cy="22%" r="38%">
+                <radialGradient id="bGl" cx="30%" cy="22%" r="40%">
                   <stop offset="0%" stop-color="rgba(255,255,255,.98)"/>
-                  <stop offset="60%" stop-color="rgba(255,255,255,.3)"/>
+                  <stop offset="55%" stop-color="rgba(255,255,255,.35)"/>
                   <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
                 </radialGradient>
-                <clipPath id="ballClip"><circle cx="31" cy="31" r="28"/></clipPath>
-                <filter id="bd"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="rgba(0,0,0,.7)"/></filter>
+                <clipPath id="ballClip"><circle cx="31" cy="31" r="27.5"/></clipPath>
+                <filter id="bd"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="rgba(0,0,0,.75)"/></filter>
               </defs>
-              <!-- sombra -->
-              <circle cx="31" cy="37" r="28" fill="rgba(0,0,0,.35)" filter="url(#bd)"/>
-              <!-- esfera com clip circular -->
+              <!-- sombra projetada -->
+              <circle cx="31" cy="34" r="27.5" fill="rgba(0,0,0,.3)" filter="url(#bd)"/>
+              <!-- tudo dentro do clip circular -->
               <g clip-path="url(#ballClip)">
-                <circle cx="31" cy="31" r="28" fill="url(#bG)"/>
-                <circle cx="31" cy="31" r="28" fill="url(#bS)" opacity=".6"/>
-                <ellipse cx="22" cy="19" rx="10" ry="7" fill="url(#bGl)" opacity=".95"/>
-                <ellipse cx="19" cy="17" rx="4" ry="2.5" fill="white" opacity=".7"/>
+                <!-- base branca -->
+                <circle cx="31" cy="31" r="27.5" fill="url(#bG)"/>
+                <!-- painéis pretos Telstar -->
+                <!-- pentágono central topo -->
+                <polygon points="31,8 38,14 35,23 27,23 24,14" fill="#1A1A1A" opacity=".88"/>
+                <!-- pentágono direito-cima -->
+                <polygon points="46,15 52,22 48,31 40,30 38,21" fill="#1A1A1A" opacity=".88"/>
+                <!-- pentágono esquerdo-cima -->
+                <polygon points="16,15 24,21 22,30 14,31 10,22" fill="#1A1A1A" opacity=".88"/>
+                <!-- pentágono direito-baixo -->
+                <polygon points="50,36 54,46 46,52 38,47 40,37" fill="#1A1A1A" opacity=".88"/>
+                <!-- pentágono esquerdo-baixo -->
+                <polygon points="12,36 22,37 24,47 16,52 8,46" fill="#1A1A1A" opacity=".88"/>
+                <!-- pentágono base -->
+                <polygon points="31,54 24,49 27,40 35,40 38,49" fill="#1A1A1A" opacity=".88"/>
+                <!-- sombra lateral -->
+                <circle cx="31" cy="31" r="27.5" fill="url(#bS)" opacity=".55"/>
+                <!-- brilho principal -->
+                <ellipse cx="21" cy="18" rx="10" ry="7" fill="url(#bGl)" opacity=".92"/>
+                <ellipse cx="18" cy="16" rx="4" ry="2.5" fill="white" opacity=".65"/>
               </g>
-              <circle cx="31" cy="31" r="28" stroke="rgba(0,0,0,.12)" stroke-width=".8" fill="none"/>
+              <!-- borda -->
+              <circle cx="31" cy="31" r="27.5" stroke="rgba(0,0,0,.18)" stroke-width=".8" fill="none"/>
             </svg>
           </div>
         </div>
         <div class="ball-sh"></div>
+        <!-- texto GOOOL -->
+        <div id="gool-txt" style="display:none;position:absolute;bottom:95px;left:50%;transform:translateX(-50%);font-family:'Sacramento',cursive;font-size:26px;color:#FFD700;text-shadow:0 0 12px rgba(255,210,0,.8),0 2px 4px rgba(0,0,0,.6);white-space:nowrap;pointer-events:none;z-index:10">Goool! 🎉</div>
       </div>
       <div class="vc-label-b"><div class="vc-name-b">Menino</div><div class="vc-tag-b">🩵</div></div>
     </button>
@@ -451,9 +476,16 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
         <div class="star-el s7"><svg width="7" height="7"><polygon points="3.5,0 4.5,2.4 7,2.4 5.2,4.2 5.9,7 3.5,5.3 1.1,7 1.8,4.2 0,2.4 2.5,2.4" fill="rgba(255,210,80,.6)"/></svg></div>
         <div class="falling-pet fp1"></div><div class="falling-pet fp2"></div>
         <div class="falling-pet fp3"></div><div class="falling-pet fp4"></div><div class="falling-pet fp5"></div>
-        <!-- sapatilha de balé -->
-        <div class="shoe-wrap">
-          <svg width="130" height="110" viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- cena: bolsa + sapatilha emergindo -->
+        <div class="shoe-wrap" style="position:relative;width:160px;height:130px">
+          <!-- sparkles ao redor -->
+          <div style="position:absolute;top:10px;left:20px;animation:sparkle 2s .3s ease-in-out infinite"><svg width="12" height="12"><polygon points="6,0 7.5,4.5 12,4.5 8.5,7 10,12 6,9 2,12 3.5,7 0,4.5 4.5,4.5" fill="rgba(255,180,220,.9)"/></svg></div>
+          <div style="position:absolute;top:5px;right:25px;animation:sparkle 2s .8s ease-in-out infinite"><svg width="10" height="10"><polygon points="5,0 6.3,3.8 10,3.8 7,6 8.2,10 5,7.5 1.8,10 3,6 0,3.8 3.7,3.8" fill="rgba(255,215,100,.95)"/></svg></div>
+          <div style="position:absolute;top:30px;right:10px;animation:sparkle 2s 1.3s ease-in-out infinite"><svg width="8" height="8"><polygon points="4,0 5,3 8,3 5.8,4.8 6.5,8 4,6 1.5,8 2.2,4.8 0,3 3,3" fill="rgba(255,200,240,.85)"/></svg></div>
+          <div style="position:absolute;bottom:40px;left:10px;animation:sparkle 2s 1.8s ease-in-out infinite"><svg width="9" height="9"><polygon points="4.5,0 5.6,3.4 9,3.4 6.4,5.5 7.3,9 4.5,6.8 1.7,9 2.6,5.5 0,3.4 3.4,3.4" fill="rgba(200,150,255,.8)"/></svg></div>
+          <!-- sapatilha emergindo da bolsa -->
+          <div style="position:absolute;bottom:28px;left:50%;animation:shoeEmerge 2.2s 0.5s ease-out forwards;opacity:0;z-index:3">
+          <svg width="110" height="90" viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <!-- gradiente principal do cetim - nacarado rosê -->
               <linearGradient id="satinMain" x1="20" y1="20" x2="110" y2="90" gradientUnits="userSpaceOnUse">
@@ -619,7 +651,47 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
             <!-- costura lateral superior -->
             <path d="M97 58 Q103 68 104 78 Q104 86 97 91" stroke="rgba(190,100,150,.3)" stroke-width="0.7" fill="none" stroke-dasharray="2.5,1.8"/>
           </svg>
-        </div>
+          </div><!-- fim sapatilha -->
+          <!-- bolsa de balé (base, z-index menor) -->
+          <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:2;animation:bagOpen 3s 0.2s ease-in-out infinite">
+            <svg width="120" height="80" viewBox="0 0 120 80" fill="none">
+              <defs>
+                <linearGradient id="bagG" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
+                  <stop offset="0%" stop-color="#C060A0"/>
+                  <stop offset="50%" stop-color="#A04080"/>
+                  <stop offset="100%" stop-color="#702060"/>
+                </linearGradient>
+                <linearGradient id="bagHL" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
+                  <stop offset="0%" stop-color="rgba(255,255,255,.0)"/>
+                  <stop offset="35%" stop-color="rgba(255,255,255,.18)"/>
+                  <stop offset="100%" stop-color="rgba(255,255,255,.0)"/>
+                </linearGradient>
+              </defs>
+              <!-- sombra -->
+              <ellipse cx="60" cy="78" rx="42" ry="5" fill="rgba(0,0,0,.35)"/>
+              <!-- corpo da bolsa -->
+              <path d="M15 28 Q12 48 14 62 Q16 72 28 75 Q44 78 60 78 Q76 78 92 75 Q104 72 106 62 Q108 48 105 28 Q100 22 88 20 Q74 18 60 18 Q46 18 32 20 Q20 22 15 28Z" fill="url(#bagG)"/>
+              <!-- highlight -->
+              <path d="M15 28 Q12 48 14 62 Q16 72 28 75 Q44 78 60 78 Q76 78 92 75 Q104 72 106 62 Q108 48 105 28 Q100 22 88 20 Q74 18 60 18 Q46 18 32 20 Q20 22 15 28Z" fill="url(#bagHL)"/>
+              <!-- abertura da bolsa (topo aberto) -->
+              <path d="M22 22 Q40 14 60 13 Q80 14 98 22" stroke="rgba(255,180,220,.5)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- alça esquerda -->
+              <path d="M35 20 Q30 8 38 4 Q46 1 50 8 Q52 14 48 20" stroke="#E878B8" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <path d="M35 20 Q30 8 38 4 Q46 1 50 8 Q52 14 48 20" stroke="rgba(255,200,235,.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- alça direita -->
+              <path d="M85 20 Q90 8 82 4 Q74 1 70 8 Q68 14 72 20" stroke="#E878B8" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <path d="M85 20 Q90 8 82 4 Q74 1 70 8 Q68 14 72 20" stroke="rgba(255,200,235,.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <!-- fecho dourado -->
+              <ellipse cx="60" cy="20" rx="10" ry="5" fill="#C8A020"/>
+              <ellipse cx="60" cy="20" rx="7" ry="3.5" fill="#F0C840"/>
+              <ellipse cx="60" cy="20" rx="4" ry="2" fill="#FFE060"/>
+              <!-- laço da bolsa -->
+              <path d="M60 18 Q52 12 48 14 Q46 17 50 20 Q55 22 60 18Z" fill="#FF90C8"/>
+              <path d="M60 18 Q68 12 72 14 Q74 17 70 20 Q65 22 60 18Z" fill="#FF90C8"/>
+              <ellipse cx="60" cy="18" rx="3" ry="2.5" fill="#FFD0EC"/>
+            </svg>
+          </div>
+        </div><!-- fim shoe-wrap -->
       </div>
       <div class="vc-label-f"><div class="vc-name-f">Menina</div><div class="vc-tag-f">🩷</div></div>
     </button>
@@ -870,6 +942,26 @@ if(nome){document.getElementById('gb-kicker').textContent='olá,';var gn=documen
 function openModal(){document.getElementById('mb').classList.add('on');if(nome)document.getElementById('mn').value=nome;}
 function closeModal(){document.getElementById('mb').classList.remove('on');setTimeout(function(){document.getElementById('mf').style.display='';document.getElementById('mo').style.display='none';},300);}
 function confirmPresence(){var raw=document.getElementById('mn').value.trim()||'você';var gr=lookGift(raw);var n=gr?gr.display:raw;document.getElementById('mo-msg').textContent=n+', a gente te espera em novembro!';if(gr&&gr.gift){document.getElementById('mo-gift-val').textContent=gr.gift;document.getElementById('mo-gift').style.display='block';}else{document.getElementById('mo-gift').style.display='none';}document.getElementById('mf').style.display='none';document.getElementById('mo').style.display='block';}
+/* Animação chute ao gol */
+(function(){
+  var ball=document.getElementById('ball-anim');
+  var gool=document.getElementById('gool-txt');
+  if(!ball||!gool)return;
+  function doKick(){
+    ball.style.animation='ballKick 1.4s cubic-bezier(.22,1,.36,1) forwards';
+    setTimeout(function(){
+      gool.style.display='block';
+      gool.style.animation='goalFlash 1s ease-out forwards';
+    },800);
+    setTimeout(function(){
+      gool.style.display='none';
+      gool.style.animation='none';
+      ball.style.animation='ballBounceReal 1.9s cubic-bezier(.36,.07,.19,.97) infinite';
+    },2400);
+  }
+  setInterval(doKick,5000);
+  setTimeout(doKick,1200);
+})();
 </script>
 </body>
 </html>
