@@ -242,18 +242,6 @@ body{background:var(--bg);color:var(--cream);font-family:'Inter',sans-serif;over
 .modal-ok{display:none}
 .ok-icon{font-size:44px;margin-bottom:8px;animation:scaleIn .4s cubic-bezier(.34,1.56,.64,1)}
 .style-badge{position:fixed;bottom:16px;right:16px;background:rgba(143,176,154,.08);border:1px solid rgba(143,176,154,.18);padding:4px 12px;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--sage);z-index:100;opacity:.6;border-radius:99px}
-/* mini-modal identificação de nome */
-#vn-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(10,22,14,.72);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:24px}
-.vn-box{background:#1A2A1E;border:1px solid rgba(143,176,154,.18);border-radius:22px;padding:28px 24px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,.55)}
-.vn-ico{font-size:36px;margin-bottom:10px}
-.vn-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;color:#FAFAF7;margin-bottom:4px}
-.vn-sub{font-size:12px;color:rgba(143,176,154,.6);letter-spacing:.04em;margin-bottom:20px}
-.vn-inp{width:100%;padding:13px 16px;border:1px solid rgba(143,176,154,.2);border-radius:12px;background:rgba(255,255,255,.04);color:#FAFAF7;font-size:16px;outline:none;text-align:center;box-sizing:border-box;margin-bottom:8px}
-.vn-inp::placeholder{color:rgba(143,176,154,.35)}
-.vn-inp:focus{border-color:rgba(143,176,154,.5)}
-.vn-err{font-size:11px;color:#D06090;min-height:16px;margin-bottom:10px;display:none}
-.vn-btn{width:100%;padding:14px;border:none;border-radius:12px;background:linear-gradient(135deg,#1A6030,#2A8048);color:#FAFAF7;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.04em}
-.vn-cancel{margin-top:10px;font-size:12px;color:rgba(143,176,154,.45);cursor:pointer;text-decoration:underline;background:none;border:none;width:100%}
 /* hide tiiny.host banner */
 #tiiny-bar,#tiiny-host-bar,[id*="tiiny"],[class*="tiiny"],
 div[style*="tiiny"],iframe[src*="tiiny"],
@@ -386,7 +374,7 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
         </svg>
         <div class="ball-wrap">
           <div class="ball-spin-inner">
-            <svg width="58" height="58" viewBox="0 0 62 62" fill="none">
+            <svg width="58" height="58" viewBox="0 0 62 62" fill="none" style="border-radius:50%;overflow:hidden;display:block">
               <defs>
                 <radialGradient id="bG" cx="38%" cy="32%" r="68%">
                   <stop offset="0%" stop-color="#FFFFFF"/>
@@ -403,20 +391,19 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
                   <stop offset="60%" stop-color="rgba(255,255,255,.3)"/>
                   <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
                 </radialGradient>
-                <filter id="bd"><feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="rgba(0,0,0,.9)"/></filter>
+                <clipPath id="ballClip"><circle cx="31" cy="31" r="28"/></clipPath>
+                <filter id="bd"><feDropShadow dx="0" dy="6" stdDeviation="5" flood-color="rgba(0,0,0,.7)"/></filter>
               </defs>
-              <!-- sombra projetada -->
-              <circle cx="31" cy="31" r="28" fill="url(#bG)" filter="url(#bd)"/>
-              <!-- esfera base -->
-              <circle cx="31" cy="31" r="28" fill="url(#bG)"/>
-              <!-- escurecimento lateral -->
-              <circle cx="31" cy="31" r="28" fill="url(#bS)" opacity=".6"/>
-              <!-- brilho principal -->
-              <ellipse cx="22" cy="19" rx="10" ry="7" fill="url(#bGl)" opacity=".95"/>
-              <!-- micro-brilho secundário -->
-              <ellipse cx="19" cy="17" rx="4" ry="2.5" fill="white" opacity=".7"/>
-              <!-- borda sutil -->
-              <circle cx="31" cy="31" r="28" stroke="rgba(0,0,0,.15)" stroke-width=".8" fill="none"/>
+              <!-- sombra -->
+              <circle cx="31" cy="37" r="28" fill="rgba(0,0,0,.35)" filter="url(#bd)"/>
+              <!-- esfera com clip circular -->
+              <g clip-path="url(#ballClip)">
+                <circle cx="31" cy="31" r="28" fill="url(#bG)"/>
+                <circle cx="31" cy="31" r="28" fill="url(#bS)" opacity=".6"/>
+                <ellipse cx="22" cy="19" rx="10" ry="7" fill="url(#bGl)" opacity=".95"/>
+                <ellipse cx="19" cy="17" rx="4" ry="2.5" fill="white" opacity=".7"/>
+              </g>
+              <circle cx="31" cy="31" r="28" stroke="rgba(0,0,0,.12)" stroke-width=".8" fill="none"/>
             </svg>
           </div>
         </div>
@@ -748,43 +735,20 @@ var MF=['É menina! Que venha cheia de graça! 🩷','Uma bailarina nascendo ent
 var meuVoto=null;
 try{var _sv=localStorage.getItem('meu_palpite_cha26');if(_sv)meuVoto=JSON.parse(_sv);}catch(e){}
 
-/* Abre mini-modal de identificação antes do voto */
+/* Voto direto — sem modal de nome */
 function votar(genero,ev){
   if(meuVoto){abrirRes(meuVoto.genero);updScore();return;}
-  _pendingGenero=genero;
-  var vm=document.getElementById('vn-modal');
-  if(vm){
-    document.getElementById('vn-inp').value='';
-    document.getElementById('vn-err').style.display='none';
-    vm.style.display='flex';
-    setTimeout(function(){document.getElementById('vn-inp').focus();},80);
-  }
-}
-function fecharVnModal(){document.getElementById('vn-modal').style.display='none';_pendingGenero=null;}
-async function confirmarNomeVoto(){
-  var raw=document.getElementById('vn-inp').value.trim();
-  var err=document.getElementById('vn-err');
-  if(!raw){err.textContent='Escreva seu nome para votar.';err.style.display='block';return;}
-  var gr=lookGift(raw);
-  if(!gr){err.textContent='Nome não encontrado na lista de convidados. Tente seu primeiro nome.';err.style.display='block';return;}
-  /* Bloquear voto duplo por display (grupo) */
-  var chave='voto_'+gr.display.replace(/\s/g,'_');
-  if(localStorage.getItem(chave)){
-    err.textContent='Seu grupo já registrou um palpite! 🌿';err.style.display='block';
-    setTimeout(function(){fecharVnModal();abrirRes(meuVoto?meuVoto.genero:_pendingGenero);updScore();},1400);
-    return;
-  }
-  var genero=_pendingGenero;
-  fecharVnModal();
-  meuVoto={genero:genero,display:gr.display};
+  var chave='voto_cha26_dev';
+  if(localStorage.getItem(chave)){abrirRes(meuVoto?meuVoto.genero:genero);updScore();return;}
+  meuVoto={genero:genero,display:'convidado'};
   localStorage.setItem('meu_palpite_cha26',JSON.stringify(meuVoto));
   localStorage.setItem(chave,'1');
   document.getElementById('vm').classList.toggle('selected',genero==='menino');
   document.getElementById('vf').classList.toggle('selected',genero==='menina');
   launch(genero==='menino'?CM:CF,220);
   abrirRes(genero);
-  await registrarVoto(gr.display,genero);
-  await updScore();
+  registrarVoto('convidado',genero);
+  updScore();
   setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},2000);
 }
 function abrirRes(e){
@@ -900,13 +864,7 @@ function lookGift(n){
   }
   return null;
 }
-/* Injeta modal de nome para voto */
-(function(){
-  var d=document.createElement('div');
-  d.id='vn-modal';
-  d.innerHTML='<div class="vn-box"><div class="vn-ico">🌿</div><div class="vn-title">Qual é o seu nome?</div><div class="vn-sub">Só convidados podem votar</div><input id="vn-inp" class="vn-inp" type="text" placeholder="Seu nome" autocomplete="off" onkeydown="if(event.key===\'Enter\')confirmarNomeVoto()"><div id="vn-err" class="vn-err"></div><button class="vn-btn" onclick="confirmarNomeVoto()">Registrar palpite</button><button class="vn-cancel" onclick="fecharVnModal()">cancelar</button></div>';
-  document.body.appendChild(d);
-})();
+/* modal de nome removido — voto direto */
 var P=new URLSearchParams(location.search);var nome=P.get('nome');
 if(nome){document.getElementById('gb-kicker').textContent='olá,';var gn=document.getElementById('gb-name');gn.style.display='block';var gr=lookGift(nome);var displayNome=gr?gr.display:nome;gn.textContent=displayNome+'!';document.getElementById('gb-default').style.display='none';if(gr){document.getElementById('gv').textContent=gr.gift;document.getElementById('gw').style.display='block';}}
 function openModal(){document.getElementById('mb').classList.add('on');if(nome)document.getElementById('mn').value=nome;}
