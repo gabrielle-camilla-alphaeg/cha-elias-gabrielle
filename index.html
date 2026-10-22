@@ -478,54 +478,16 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
         <div class="star-el s7"><svg width="7" height="7"><polygon points="3.5,0 4.5,2.4 7,2.4 5.2,4.2 5.9,7 3.5,5.3 1.1,7 1.8,4.2 0,2.4 2.5,2.4" fill="rgba(255,210,80,.6)"/></svg></div>
         <div class="falling-pet fp1"></div><div class="falling-pet fp2"></div>
         <div class="falling-pet fp3"></div><div class="falling-pet fp4"></div><div class="falling-pet fp5"></div>
-        <!-- cena: sapatilha emergindo da bolsa -->
-        <div class="shoe-wrap" style="position:relative;width:160px;height:150px">
+        <!-- cena: sapatilha de bailarina -->
+        <div class="shoe-wrap" style="position:relative;width:160px;height:130px">
           <!-- sparkles ao redor -->
           <div style="position:absolute;top:8px;left:18px;animation:sparkle 2s .3s ease-in-out infinite"><svg width="14" height="14"><polygon points="7,0 8.8,5.2 14,5.2 9.8,8.2 11.5,14 7,10.5 2.5,14 4.2,8.2 0,5.2 5.2,5.2" fill="rgba(255,180,220,.95)"/></svg></div>
           <div style="position:absolute;top:4px;right:22px;animation:sparkle 2s .8s ease-in-out infinite"><svg width="11" height="11"><polygon points="5.5,0 6.9,4.1 11,4.1 7.8,6.6 9,11 5.5,8.3 2,11 3.2,6.6 0,4.1 4.1,4.1" fill="rgba(255,215,100,.95)"/></svg></div>
           <div style="position:absolute;top:32px;right:8px;animation:sparkle 2s 1.3s ease-in-out infinite"><svg width="9" height="9"><polygon points="4.5,0 5.6,3.4 9,3.4 6.4,5.5 7.3,9 4.5,6.8 1.7,9 2.6,5.5 0,3.4 3.4,3.4" fill="rgba(255,200,240,.9)"/></svg></div>
-          <div style="position:absolute;bottom:55px;left:8px;animation:sparkle 2s 1.8s ease-in-out infinite"><svg width="10" height="10"><polygon points="5,0 6.3,3.8 10,3.8 7,6 8.2,10 5,7.5 1.8,10 3,6 0,3.8 3.7,3.8" fill="rgba(200,150,255,.85)"/></svg></div>
-          <div style="position:absolute;bottom:45px;right:14px;animation:sparkle 2s 2.4s ease-in-out infinite"><svg width="8" height="8"><polygon points="4,0 5,3 8,3 5.8,4.8 6.5,8 4,6 1.5,8 2.2,4.8 0,3 3,3" fill="rgba(255,180,220,.8)"/></svg></div>
-          <!-- bolsa rosa na base (estática, z-index 2) -->
-          <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);z-index:2;width:100px">
-            <svg width="100" height="80" viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="bagBody" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
-                  <stop offset="0%" stop-color="#F4A8CC"/>
-                  <stop offset="50%" stop-color="#E07AAE"/>
-                  <stop offset="100%" stop-color="#C45590"/>
-                </linearGradient>
-                <linearGradient id="bagShine" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
-                  <stop offset="0%" stop-color="rgba(255,255,255,.0)"/>
-                  <stop offset="35%" stop-color="rgba(255,255,255,.35)"/>
-                  <stop offset="100%" stop-color="rgba(255,255,255,.0)"/>
-                </linearGradient>
-                <filter id="bagShadow"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(180,60,120,.35)"/></filter>
-              </defs>
-              <!-- alça da bolsa -->
-              <path d="M32 22 Q32 6 50 6 Q68 6 68 22" stroke="#D065A0" stroke-width="5" fill="none" stroke-linecap="round"/>
-              <path d="M32 22 Q32 6 50 6 Q68 6 68 22" stroke="rgba(255,210,240,.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
-              <!-- corpo da bolsa -->
-              <rect x="12" y="22" width="76" height="52" rx="12" fill="url(#bagBody)" filter="url(#bagShadow)"/>
-              <!-- brilho -->
-              <rect x="12" y="22" width="76" height="52" rx="12" fill="url(#bagShine)"/>
-              <!-- fechamento / zíper line -->
-              <line x1="20" y1="30" x2="80" y2="30" stroke="rgba(200,80,150,.5)" stroke-width="1.5" stroke-dasharray="4,3"/>
-              <!-- puxador do zíper -->
-              <circle cx="50" cy="30" r="4" fill="#D870B0"/>
-              <circle cx="50" cy="30" r="2.5" fill="#FFDDEF"/>
-              <!-- detalhe lateral -->
-              <path d="M14 42 Q12 55 14 65 Q12 55 14 42Z" stroke="rgba(255,180,220,.3)" stroke-width="2" fill="none"/>
-              <path d="M86 42 Q88 55 86 65" stroke="rgba(255,180,220,.3)" stroke-width="2" fill="none"/>
-              <!-- laço decorativo na bolsa -->
-              <path d="M42 26 Q38 21 35 23 Q33 26 37 29 Q40 30 43 28Z" fill="#FFD0EC"/>
-              <path d="M58 26 Q62 21 65 23 Q67 26 63 29 Q60 30 57 28Z" fill="#FFD0EC"/>
-              <ellipse cx="50" cy="27" rx="4" ry="3" fill="#F0A0C8"/>
-              <ellipse cx="50" cy="27" rx="2" ry="1.5" fill="#FFE0F4"/>
-            </svg>
-          </div>
-          <!-- sapatilha emergindo acima da bolsa -->
-          <div style="position:absolute;bottom:42px;left:50%;transform:translateX(-50%);animation:shoeEmerge 2.2s 0.3s ease-out forwards;opacity:0;z-index:4">
+          <div style="position:absolute;bottom:35px;left:8px;animation:sparkle 2s 1.8s ease-in-out infinite"><svg width="10" height="10"><polygon points="5,0 6.3,3.8 10,3.8 7,6 8.2,10 5,7.5 1.8,10 3,6 0,3.8 3.7,3.8" fill="rgba(200,150,255,.85)"/></svg></div>
+          <div style="position:absolute;bottom:20px;right:14px;animation:sparkle 2s 2.4s ease-in-out infinite"><svg width="8" height="8"><polygon points="4,0 5,3 8,3 5.8,4.8 6.5,8 4,6 1.5,8 2.2,4.8 0,3 3,3" fill="rgba(255,180,220,.8)"/></svg></div>
+          <!-- sapatilha -->
+          <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);animation:shoeEmerge 2.2s 0.3s ease-out forwards;opacity:0;z-index:3">
           <svg width="110" height="90" viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <!-- gradiente principal do cetim - nacarado rosê -->
