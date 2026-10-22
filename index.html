@@ -581,7 +581,10 @@ var _jbLock=false;
 async function _jbGet(){
   var r=await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN+'/latest',{headers:{'X-Master-Key':JB_KEY}});
   var d=await r.json();
-  return d.record||{votos:[],confirmados:[]};
+  var rec=d.record||{};
+  if(!Array.isArray(rec.votos))rec.votos=[];
+  if(!Array.isArray(rec.confirmados))rec.confirmados=[];
+  return rec;
 }
 async function _jbPut(data){
   await fetch('https://api.jsonbin.io/v3/b/'+JB_BIN,{method:'PUT',headers:{'Content-Type':'application/json','X-Master-Key':JB_KEY},body:JSON.stringify(data)});
