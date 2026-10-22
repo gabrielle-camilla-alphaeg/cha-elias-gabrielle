@@ -488,166 +488,89 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
           <div style="position:absolute;bottom:20px;right:14px;animation:sparkle 2s 2.4s ease-in-out infinite"><svg width="8" height="8"><polygon points="4,0 5,3 8,3 5.8,4.8 6.5,8 4,6 1.5,8 2.2,4.8 0,3 3,3" fill="rgba(255,180,220,.8)"/></svg></div>
           <!-- sapatilha -->
           <div style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);animation:shoeEmerge 2.2s 0.3s ease-out forwards;opacity:0;z-index:3">
-          <svg width="110" height="90" viewBox="0 0 130 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- par de sapatilhas penduradas pelo laço -->
+          <svg width="130" height="115" viewBox="0 0 130 115" fill="none" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <!-- gradiente principal do cetim - nacarado rosê -->
-              <linearGradient id="satinMain" x1="20" y1="20" x2="110" y2="90" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#FFF0F5"/>
-                <stop offset="18%" stop-color="#FFD6E8"/>
-                <stop offset="45%" stop-color="#F5A8CC"/>
-                <stop offset="72%" stop-color="#E07AAE"/>
-                <stop offset="100%" stop-color="#C45590"/>
+              <linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#FFD6E8"/>
+                <stop offset="50%" stop-color="#F5A0C8"/>
+                <stop offset="100%" stop-color="#D8609A"/>
               </linearGradient>
-              <!-- gradiente lateral para forma 3D -->
-              <linearGradient id="satinSide" x1="0" y1="50" x2="130" y2="50" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="#B84885"/>
-                <stop offset="30%" stop-color="#E888B8"/>
-                <stop offset="55%" stop-color="#FFF0F5"/>
-                <stop offset="80%" stop-color="#F0A0C8"/>
-                <stop offset="100%" stop-color="#C45590"/>
+              <linearGradient id="sg2" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#FFE4F0"/>
+                <stop offset="50%" stop-color="#F8B8D8"/>
+                <stop offset="100%" stop-color="#E07AB0"/>
               </linearGradient>
-              <!-- gradiente da caixa de ponta -->
-              <linearGradient id="boxGrad" x1="0" y1="0" x2="1" y2="0" gradientUnits="objectBoundingBox">
-                <stop offset="0%" stop-color="#E8D0DC"/>
-                <stop offset="40%" stop-color="#F8EAF0"/>
-                <stop offset="70%" stop-color="#EDD0E0"/>
-                <stop offset="100%" stop-color="#D4A8C0"/>
+              <linearGradient id="bow1" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
+                <stop offset="0%" stop-color="#FFE0F0"/>
+                <stop offset="100%" stop-color="#E878B8"/>
               </linearGradient>
-              <!-- reflexo especular do cetim -->
-              <linearGradient id="specular1" x1="28" y1="22" x2="75" y2="55" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stop-color="rgba(255,255,255,.85)"/>
-                <stop offset="50%" stop-color="rgba(255,255,255,.3)"/>
-                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-              </linearGradient>
-              <!-- gradiente da fita de cetim -->
-              <linearGradient id="ribbonGrad" x1="0" y1="0" x2="0" y2="1" gradientUnits="objectBoundingBox">
-                <stop offset="0%" stop-color="#FFDDEF"/>
-                <stop offset="40%" stop-color="#F0A0C8"/>
-                <stop offset="100%" stop-color="#D065A0"/>
-              </linearGradient>
-              <!-- gradiente do laço -->
-              <linearGradient id="bowGrad" x1="0" y1="0" x2="1" y2="1" gradientUnits="objectBoundingBox">
-                <stop offset="0%" stop-color="#FFE8F4"/>
-                <stop offset="50%" stop-color="#F0A0C8"/>
-                <stop offset="100%" stop-color="#D870B0"/>
-              </linearGradient>
-              <!-- sombra difusa -->
-              <filter id="shadowBlur" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur"/>
-                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
-              </filter>
-              <filter id="softBlur">
-                <feGaussianBlur stdDeviation="2"/>
-              </filter>
-              <filter id="glowPink" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="4" result="blur"/>
-                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
+              <filter id="pk"><feGaussianBlur stdDeviation="1.5"/></filter>
             </defs>
 
-            <!-- aura de glow rosado atrás da sapatilha -->
-            <ellipse cx="62" cy="68" rx="48" ry="30" fill="rgba(240,130,190,.13)" filter="url(#softBlur)"/>
+            <!-- === LAÇO NO TOPO === -->
+            <!-- asa esquerda do laço -->
+            <path d="M65 14 Q48 4 40 8 Q34 12 38 18 Q44 24 60 20Z" fill="url(#bow1)"/>
+            <path d="M65 14 Q48 4 40 8 Q34 12 38 18 Q44 24 60 20Z" stroke="#D060A0" stroke-width="0.8" fill="none"/>
+            <path d="M63 15 Q50 8 44 10 Q39 13 42 17" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <!-- asa direita do laço -->
+            <path d="M67 14 Q84 4 92 8 Q98 12 94 18 Q88 24 72 20Z" fill="url(#bow1)"/>
+            <path d="M67 14 Q84 4 92 8 Q98 12 94 18 Q88 24 72 20Z" stroke="#D060A0" stroke-width="0.8" fill="none"/>
+            <path d="M69 15 Q82 8 88 10 Q93 13 90 17" stroke="rgba(255,255,255,.5)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <!-- nó central do laço -->
+            <ellipse cx="66" cy="17" rx="6" ry="5" fill="#E878B8"/>
+            <ellipse cx="66" cy="17" rx="3.5" ry="3" fill="#FFDDEF"/>
+            <ellipse cx="65.5" cy="16.5" rx="1.8" ry="1.4" fill="rgba(255,255,255,.7)"/>
 
-            <!-- === CORPO PRINCIPAL DA SAPATILHA === -->
-            <!-- sombra interna da sapatilha (profundidade) -->
-            <path d="M22 58 Q18 70 20 82 Q22 90 32 94 Q48 98 70 96 Q88 94 98 88 Q106 82 104 74 Q102 64 96 58 Q88 52 75 50 Q60 48 45 50 Q32 52 22 58Z"
-                  fill="rgba(0,0,0,.22)" transform="translate(2,3)" filter="url(#softBlur)"/>
+            <!-- fitas do laço descendo para as sapatilhas -->
+            <!-- fita esquerda (para sapatilha esq) -->
+            <path d="M62 21 Q56 32 48 42 Q44 48 42 55" stroke="#F0A0C8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M62 21 Q56 32 48 42 Q44 48 42 55" stroke="rgba(255,255,255,.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <!-- fita direita (para sapatilha dir) -->
+            <path d="M70 21 Q76 32 84 42 Q88 48 90 55" stroke="#F0A0C8" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <path d="M70 21 Q76 32 84 42 Q88 48 90 55" stroke="rgba(255,255,255,.35)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 
-            <!-- corpo principal — forma anatômica de sapatilha de ponta -->
-            <path d="M20 58 Q16 68 18 80 Q20 90 30 94 Q46 100 68 98 Q86 96 97 90 Q106 84 105 75 Q104 65 97 58 Q89 51 75 49 Q60 47 44 49 Q30 51 20 58Z"
-                  fill="url(#satinMain)"/>
+            <!-- === SAPATILHA ESQUERDA (virada, ponta para baixo-esq, inclinada) === -->
+            <g transform="rotate(-18 45 80)">
+              <!-- sombra -->
+              <path d="M20 62 Q14 72 16 84 Q18 92 30 96 Q44 100 60 97 Q72 94 76 86 Q78 78 74 70 Q68 62 56 60 Q42 58 28 60 Q22 62 20 62Z" fill="rgba(0,0,0,.12)" transform="translate(1,2)" filter="url(#pk)"/>
+              <!-- corpo -->
+              <path d="M20 62 Q14 72 16 84 Q18 92 30 96 Q44 100 60 97 Q72 94 76 86 Q78 78 74 70 Q68 62 56 60 Q42 58 28 60 Q22 62 20 62Z" fill="url(#sg1)"/>
+              <!-- brilho topo -->
+              <path d="M26 62 Q40 58 56 60 Q44 62 30 66 Q22 68 20 66Z" fill="rgba(255,255,255,.2)"/>
+              <!-- bico -->
+              <path d="M20 62 Q12 68 10 76 Q10 84 16 90 Q22 94 30 96 Q20 92 16 84 Q14 74 20 66Z" fill="#E8A8C0"/>
+              <ellipse cx="12" cy="80" rx="4.5" ry="7" fill="#F0C0D4" transform="rotate(-10 12 80)"/>
+              <!-- elástico cruzado -->
+              <path d="M30 62 Q44 57 58 60 Q68 62 74 68" stroke="rgba(220,140,185,.8)" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M30 62 Q44 57 58 60 Q68 62 74 68" stroke="rgba(255,220,240,.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <!-- costura solado -->
+              <path d="M18 82 Q28 96 52 99 Q72 100 76 88" stroke="rgba(190,100,150,.3)" stroke-width="0.8" fill="none" stroke-dasharray="3,2"/>
+              <!-- brilho cetim -->
+              <path d="M32 62 Q48 59 62 62" stroke="rgba(255,255,255,.22)" stroke-width="1" fill="none" stroke-linecap="round"/>
+              <path d="M28 70 Q44 66 60 68" stroke="rgba(255,255,255,.14)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+            </g>
 
-            <!-- plano lateral superior (curvatura 3D) -->
-            <path d="M20 58 Q30 51 44 49 Q60 47 75 49 Q89 51 97 58 Q88 52 74 50 Q58 48 43 50 Q30 52 20 58Z"
-                  fill="rgba(255,255,255,.12)"/>
-
-            <!-- === CAIXA DE PONTA (bico rígido) === -->
-            <!-- o bico estrutural — ponta achatada característica da sapatilha de pointe -->
-            <path d="M20 58 Q14 64 12 72 Q11 80 16 86 Q22 92 32 94 Q22 90 18 82 Q16 72 20 62Z"
-                  fill="#D8B8C8"/>
-            <path d="M12 72 Q11 82 18 88 Q26 94 32 94 Q22 90 16 86 Q11 80 12 72Z"
-                  fill="#EDD8E4"/>
-            <!-- costura da caixa de ponta -->
-            <path d="M18 62 Q14 70 13 78 Q13 84 17 88" stroke="rgba(200,160,185,.6)" stroke-width="0.8" fill="none" stroke-dasharray="2,1.5"/>
-            <!-- borda achatada da ponta (plataforma) -->
-            <ellipse cx="16" cy="80" rx="5" ry="8" fill="#E8D0DC" transform="rotate(-8 16 80)"/>
-            <ellipse cx="15.5" cy="80" rx="3.5" ry="6.5" fill="#F0E0EA" transform="rotate(-8 15.5 80)"/>
-
-            <!-- === TEXTURA DE CETIM (reflexos diagonais) === -->
-            <!-- reflexos de cetim característicos -->
-            <path d="M35 55 Q55 50 75 52" stroke="rgba(255,255,255,.18)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-            <path d="M30 62 Q50 57 70 59" stroke="rgba(255,255,255,.14)" stroke-width="1" fill="none" stroke-linecap="round"/>
-            <path d="M28 70 Q48 66 68 67" stroke="rgba(255,255,255,.1)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
-            <!-- vincos suaves do cetim (dobras características) -->
-            <path d="M42 50 Q40 62 44 76 Q46 85 50 92" stroke="rgba(180,80,130,.2)" stroke-width="0.9" fill="none" stroke-linecap="round"/>
-            <path d="M60 49 Q58 61 60 74 Q62 84 66 92" stroke="rgba(180,80,130,.15)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
-            <path d="M78 52 Q77 63 78 74 Q79 83 82 90" stroke="rgba(180,80,130,.12)" stroke-width="0.7" fill="none" stroke-linecap="round"/>
-
-            <!-- === REFLEXO ESPECULAR PRINCIPAL === -->
-            <path d="M30 54 Q45 50 62 52 Q50 54 36 60 Q28 64 26 62 Q26 57 30 54Z"
-                  fill="url(#specular1)" opacity="0.9"/>
-            <!-- segundo reflexo (reflexo de luz lateral) -->
-            <path d="M80 52 Q90 54 96 60 Q92 58 85 56 Q82 55 80 52Z"
-                  fill="rgba(255,255,255,.35)"/>
-            <!-- micro-highlight na caixa de ponta -->
-            <ellipse cx="16" cy="74" rx="2.5" ry="4" fill="rgba(255,255,255,.45)" transform="rotate(-10 16 74)"/>
-
-            <!-- === ELÁSTICO CRUZADO === -->
-            <!-- elástico característico das sapatilhas (cruza sobre o peito do pé) -->
-            <path d="M38 54 Q52 48 68 50 Q78 51 88 56" stroke="rgba(220,150,190,.7)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-            <path d="M38 54 Q52 48 68 50 Q78 51 88 56" stroke="rgba(255,220,240,.4)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <!-- segundo elástico (V cruzado) -->
-            <path d="M45 56 Q58 60 72 58 Q82 57 90 60" stroke="rgba(200,120,170,.5)" stroke-width="2.8" fill="none" stroke-linecap="round"/>
-            <path d="M45 56 Q58 60 72 58 Q82 57 90 60" stroke="rgba(255,210,235,.3)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-
-            <!-- === FITA DE CETIM (enrolada no tornozelo) === -->
-            <!-- fita esquerda saindo do calcanhar -->
-            <path d="M32 88 Q28 82 24 74 Q22 66 25 60" stroke="url(#ribbonGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <path d="M32 88 Q28 82 24 74 Q22 66 25 60" stroke="rgba(255,235,248,.35)" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <!-- reflexo da fita -->
-            <path d="M31 87 Q27 81 23 73 Q21 65 24 59" stroke="rgba(255,255,255,.2)" stroke-width="1" fill="none" stroke-linecap="round"/>
-
-            <!-- fita direita -->
-            <path d="M88 84 Q93 76 96 68 Q98 60 95 54" stroke="url(#ribbonGrad)" stroke-width="4.5" fill="none" stroke-linecap="round"/>
-            <path d="M88 84 Q93 76 96 68 Q98 60 95 54" stroke="rgba(255,235,248,.35)" stroke-width="2" fill="none" stroke-linecap="round"/>
-            <!-- cruzamento das fitas (nó) -->
-            <ellipse cx="60" cy="50" rx="9" ry="5" fill="#F0A0C8" transform="rotate(-5 60 50)"/>
-            <ellipse cx="60" cy="50" rx="6" ry="3.2" fill="#FFD6EC" transform="rotate(-5 60 50)"/>
-
-            <!-- === LAÇO DECORATIVO === -->
-            <!-- pétala esquerda do laço -->
-            <path d="M60 49 Q46 40 40 43 Q36 46 40 52 Q46 55 58 51Z"
-                  fill="url(#bowGrad)"/>
-            <path d="M60 49 Q46 40 40 43 Q36 46 40 52 Q46 55 58 51Z"
-                  stroke="rgba(200,100,160,.4)" stroke-width="0.8" fill="none"/>
-            <!-- reflexo da pétala esquerda -->
-            <path d="M58 50 Q50 44 44 45 Q40 47 42 50" stroke="rgba(255,255,255,.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-
-            <!-- pétala direita do laço -->
-            <path d="M62 49 Q76 40 82 43 Q86 46 82 52 Q76 55 64 51Z"
-                  fill="url(#bowGrad)"/>
-            <path d="M62 49 Q76 40 82 43 Q86 46 82 52 Q76 55 64 51Z"
-                  stroke="rgba(200,100,160,.4)" stroke-width="0.8" fill="none"/>
-            <!-- reflexo pétala direita -->
-            <path d="M64 50 Q72 44 78 46 Q82 48 80 51" stroke="rgba(255,255,255,.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-
-            <!-- centro do laço (nó) -->
-            <ellipse cx="61" cy="50" rx="5" ry="4" fill="#E878B8"/>
-            <ellipse cx="61" cy="50" rx="3" ry="2.5" fill="#FFCCE8"/>
-            <ellipse cx="60.5" cy="49.5" rx="1.5" ry="1.2" fill="rgba(255,255,255,.6)"/>
-
-            <!-- === PONTAS DO LAÇO (fitas caindo) === -->
-            <path d="M58 53 Q54 60 50 66 Q48 70 50 72" stroke="url(#ribbonGrad)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-            <path d="M64 53 Q68 61 72 67 Q74 71 72 73" stroke="url(#ribbonGrad)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-            <!-- brilho nas fitas do laço -->
-            <path d="M57 54 Q53 61 49.5 67" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
-            <path d="M65 54 Q69 62 72.5 68" stroke="rgba(255,255,255,.25)" stroke-width="1" fill="none" stroke-linecap="round"/>
-
-            <!-- === COSTURA E ACABAMENTOS === -->
-            <!-- linha de costura do solado (parte inferior) -->
-            <path d="M20 80 Q30 96 55 99 Q80 100 100 90" stroke="rgba(190,100,150,.35)" stroke-width="0.8" fill="none" stroke-dasharray="3,2"/>
-            <!-- costura lateral superior -->
-            <path d="M97 58 Q103 68 104 78 Q104 86 97 91" stroke="rgba(190,100,150,.3)" stroke-width="0.7" fill="none" stroke-dasharray="2.5,1.8"/>
+            <!-- === SAPATILHA DIREITA (inclinada oposta) === -->
+            <g transform="rotate(14 88 80)">
+              <!-- sombra -->
+              <path d="M56 62 Q50 72 52 84 Q54 92 66 96 Q80 100 96 97 Q108 94 112 86 Q114 78 110 70 Q104 62 92 60 Q78 58 64 60 Q58 62 56 62Z" fill="rgba(0,0,0,.12)" transform="translate(1,2)" filter="url(#pk)"/>
+              <!-- corpo -->
+              <path d="M56 62 Q50 72 52 84 Q54 92 66 96 Q80 100 96 97 Q108 94 112 86 Q114 78 110 70 Q104 62 92 60 Q78 58 64 60 Q58 62 56 62Z" fill="url(#sg2)"/>
+              <!-- brilho topo -->
+              <path d="M62 62 Q76 58 92 60 Q80 62 66 66 Q58 68 56 66Z" fill="rgba(255,255,255,.22)"/>
+              <!-- bico (lado direito) -->
+              <path d="M112 70 Q118 76 118 84 Q116 92 108 96 Q100 100 96 97 Q104 94 110 88 Q114 80 112 72Z" fill="#E8A8C0"/>
+              <ellipse cx="117" cy="82" rx="4.5" ry="7" fill="#F0C0D4" transform="rotate(10 117 82)"/>
+              <!-- elástico cruzado -->
+              <path d="M66 62 Q80 57 94 60 Q104 62 110 68" stroke="rgba(220,140,185,.8)" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <path d="M66 62 Q80 57 94 60 Q104 62 110 68" stroke="rgba(255,220,240,.4)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+              <!-- costura solado -->
+              <path d="M54 82 Q64 96 88 99 Q108 100 112 88" stroke="rgba(190,100,150,.3)" stroke-width="0.8" fill="none" stroke-dasharray="3,2"/>
+              <!-- brilho cetim -->
+              <path d="M68 62 Q84 59 98 62" stroke="rgba(255,255,255,.22)" stroke-width="1" fill="none" stroke-linecap="round"/>
+              <path d="M64 70 Q80 66 96 68" stroke="rgba(255,255,255,.14)" stroke-width="0.8" fill="none" stroke-linecap="round"/>
+            </g>
           </svg>
           </div><!-- fim sapatilha -->
         </div><!-- fim shoe-wrap -->
