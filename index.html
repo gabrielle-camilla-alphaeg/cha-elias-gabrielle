@@ -545,6 +545,17 @@ div[style*="z-index: 2147483647"]:not(#overlay):not(#modal){
     <div class="modal-ok" id="mo"><div class="ok-icon">🌿</div><h3>Confirmado!</h3><p id="mo-msg" style="color:var(--mut)">A gente te espera!</p><div id="mo-gift" style="display:none;margin-top:18px;background:rgba(143,176,154,.07);border:1px solid rgba(143,176,154,.15);border-radius:12px;padding:14px 16px;text-align:left"><div style="font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:var(--sage);opacity:.7;margin-bottom:6px;font-weight:600">🎁 Sugestão de presente</div><div id="mo-gift-val" style="font-size:13px;color:var(--cream);opacity:.75;line-height:1.55"></div></div></div>
   </div>
 </div>
+<!-- Mini modal: nome antes do voto -->
+<div id="vn-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:800;align-items:center;justify-content:center;padding:24px;backdrop-filter:blur(24px)">
+  <div style="background:#F2F4F0;padding:38px 26px;max-width:340px;width:100%;text-align:center;border:1px solid rgba(143,176,154,.15);border-radius:20px;position:relative;animation:scaleIn .32s cubic-bezier(.34,1.56,.64,1)">
+    <button onclick="_fecharVotoNome()" style="position:absolute;top:14px;right:18px;background:none;border:none;font-size:20px;color:#6A8878;cursor:pointer;opacity:.4">×</button>
+    <div style="font-size:28px;margin-bottom:8px">🌿</div>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:6px;color:#2A2A24" id="vn-titulo">Seu palpite</h3>
+    <p style="font-size:13px;color:#6A8878;margin-bottom:20px">Qual é o seu nome?</p>
+    <input id="vn-inp" type="text" placeholder="Seu nome" onkeydown="if(event.key==='Enter')_confirmarVotoNome()" style="width:100%;padding:14px 20px;border:none;border-bottom:1px solid rgba(143,176,154,.15);background:transparent;font-size:16px;color:#2A2A24;outline:none;text-align:center;margin-bottom:16px">
+    <button onclick="_confirmarVotoNome()" style="width:100%;padding:16px;background:#8A6A2A;color:#F0EDE8;border:none;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer">Confirmar palpite</button>
+  </div>
+</div>
 <div class="style-badge">Jardim Botânico</div>
 
 <script>
@@ -620,12 +631,27 @@ var MF=['É menina! Que venha cheia de graça! 🩷','Uma bailarina nascendo ent
 var meuVoto=null;
 try{var _sv=localStorage.getItem('meu_palpite_cha26');if(_sv)meuVoto=JSON.parse(_sv);}catch(e){}
 
-/* Voto direto — sem modal de nome */
+/* Voto com nome */
+var _pendingVotoGenero=null;
 function votar(genero,ev){
   if(meuVoto){abrirRes(meuVoto.genero);updScore();return;}
   var chave='voto_cha26_dev';
   if(localStorage.getItem(chave)){abrirRes(meuVoto?meuVoto.genero:genero);updScore();return;}
-  meuVoto={genero:genero,display:'convidado'};
+  // abre mini modal pedindo nome
+  _pendingVotoGenero=genero;
+  var emoji=genero==='menino'?'⚽':'🩰';
+  document.getElementById('vn-titulo').textContent='Seu palpite: '+(genero==='menino'?'Menino '+emoji:'Menina '+emoji);
+  document.getElementById('vn-inp').value='';
+  document.getElementById('vn-bg').style.display='flex';
+  setTimeout(function(){document.getElementById('vn-inp').focus();},120);
+}
+function _confirmarVotoNome(){
+  var raw=document.getElementById('vn-inp').value.trim();
+  var nome=raw||'convidado';
+  var genero=_pendingVotoGenero;
+  document.getElementById('vn-bg').style.display='none';
+  var chave='voto_cha26_dev';
+  meuVoto={genero:genero,display:nome};
   localStorage.setItem('meu_palpite_cha26',JSON.stringify(meuVoto));
   localStorage.setItem(chave,'1');
   window._votoGenero=genero;
@@ -634,10 +660,11 @@ function votar(genero,ev){
   launch(genero==='menino'?CM:CF,220);
   if(genero==='menina'&&window._startPetalLoop)window._startPetalLoop();
   abrirRes(genero);
-  registrarVoto('convidado',genero);
+  registrarVoto(nome,genero);
   updScore();
   setTimeout(function(){document.getElementById('lw').style.display='block';startFeed();},2000);
 }
+function _fecharVotoNome(){document.getElementById('vn-bg').style.display='none';_pendingVotoGenero=null;}
 function abrirRes(e){
   var m=e==='menino';
   document.getElementById('rc-title').textContent='Palpite: '+(m?'Menino 🩵':'Menina 🩷');
